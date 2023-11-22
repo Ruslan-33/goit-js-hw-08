@@ -3,25 +3,44 @@ import { galleryItems } from "./gallery-items.js";
 
 console.log(galleryItems);
 
+// products - galleryItems   - ЗАМЕНА!!!
+
+const container = document.querySelector(".gallery");
+
+container.insertAdjacentHTML("beforeend", createMarkup(galleryItems));
+container.addEventListener("click", handleClick);
+
 function createMarkup(arr) {
-  return arr.map(
-    ({ preview, original, description }) =>
-      `<li class="item gallery__item">
-          <a class="gallery__link" href="${original}">
-            <img
-              class="gallery__image"
-              src="${preview}" 
-              data-source="${original}"
-              alt="${description}" 
-              width="300"
-            />
-            <h2>${description}</h2>
-          </a>
-      </li>`
-  );
+  return arr
+    .map(
+      ({ preview, original, description }) => `
+    <li data-id="${description}" class="item galleryItems">
+      <img src="${preview}" alt="${description}" width="300">
+    </li>`
+    )
+    .join("");
 }
 
-console.log(createMarkup(galleryItems));
+function handleClick(event) {
+  if (event.target === event.currentTarget) {
+    return;
+  }
+
+  const currentGalleryItem = event.target.closest(".galleryItems");
+  const id = currentGalleryItem.dataset.description;
+  const galleryItem = galleryItems.find(
+    ({ id: descriptionId }) => descriptionId === Number(id)
+  );
+  console.log(id);
+
+  const instance = basicLightbox.create(`
+    <div class="modal">
+      <img src="${galleryItems.img}" alt="${galleryItems.description}">
+    </div>
+`);
+
+  instance.show();
+}
 
 // // Додаємо слухач подій на галерею
 // gallery.addEventListener("click", (event) => {
