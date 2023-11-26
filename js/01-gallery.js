@@ -23,6 +23,7 @@ function createMarkup(array) {
     .join("");
 }
 
+// /
 gallery.insertAdjacentHTML("beforeend", createMarkup(galleryItems));
 
 gallery.addEventListener("click", handleClick);
@@ -39,6 +40,7 @@ function handleClick(event) {
 `);
   instance.show();
 
+  // /
   document.addEventListener("keypress", handlePress);
   function handlePress(event) {
     console.log(event);

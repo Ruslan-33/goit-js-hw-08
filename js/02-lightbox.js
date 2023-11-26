@@ -18,7 +18,7 @@ function createGalleryItem(preview, original, description) {
 	`;
 }
 
-//Функція завантаження зображень
+// /
 function createGallery(arr) {
   const markup = arr
     .map((item) =>
@@ -27,7 +27,8 @@ function createGallery(arr) {
     .join("");
   gallery.innerHTML = markup;
 }
-//Виклик функції
+
+// /
 createGallery(galleryItems);
 
 const lightbox = new SimpleLightbox(".gallery a", {
