@@ -1,84 +1,49 @@
 import { galleryItems } from "./gallery-items.js";
 // Change code below this line
 
-console.log(galleryItems);
+const gallery = document.querySelector(".gallery");
 
-// products - galleryItems   - ЗАМЕНА!!!
-
-const container = document.querySelector(".gallery");
-
-container.insertAdjacentHTML("beforeend", createMarkup(galleryItems));
-container.addEventListener("click", handleClick);
-
-function createMarkup(arr) {
-  return arr
+function createMarkup(array) {
+  return array
     .map(
-      ({ preview, original, description }) => `
-    <li data-id="${description}" class="item galleryItems">
-      <img src="${preview}" alt="${description}" width="300">
-    </li>`
+      ({ preview, original, description }) =>
+        `
+    <li class="gallery__item">
+     <a class="gallery__link" href="${original}">
+    <img
+      class="gallery__image"
+      src="${preview}"
+      data-source="${original}"
+      alt="${description}"
+    />
+  </a>
+</li>
+    `
     )
     .join("");
 }
+
+gallery.insertAdjacentHTML("beforeend", createMarkup(galleryItems));
+
+gallery.addEventListener("click", handleClick);
 
 function handleClick(event) {
   if (event.target === event.currentTarget) {
     return;
   }
-
-  const currentGalleryItem = event.target.closest(".galleryItems");
-  const id = currentGalleryItem.dataset.description;
-  const galleryItem = galleryItems.find(
-    ({ id: descriptionId }) => descriptionId === Number(id)
-  );
-  console.log(id);
+  event.preventDefault();
 
   const instance = basicLightbox.create(`
-    <div class="modal">
-      <img src="${galleryItems.img}" alt="${galleryItems.description}">
-    </div>
+	<img src=${event.target.dataset.source}
+    >
 `);
-
   instance.show();
+
+  document.addEventListener("keypress", handlePress);
+  function handlePress(event) {
+    console.log(event);
+    if (event.code === "Escape") {
+      instance.close();
+    }
+  }
 }
-
-// // Додаємо слухач подій на галерею
-// gallery.addEventListener("click", (event) => {
-//   event.preventDefault();
-
-//   const target = event.target;
-//   const isImage = target.nodeName === "IMG";
-
-//   if (!isImage) {
-//     return;
-//   }
-
-//   const largeImageLink = target.dataset.source;
-//   const imgAlt = target.alt;
-
-//   function closeModal() {
-//     instance.close();
-//     window.removeEventListener("keydown", onKeyPress);
-//     window.removeEventListener("click", onOverlayClick);
-//   }
-
-//   function onKeyPress(event) {
-//     if (event.key === "Escape") {
-//       closeModal();
-//     }
-//   }
-
-//   function onOverlayClick(event) {
-//     if (event.target.className.includes("basicLightbox")) {
-//       closeModal();
-//     }
-//   }
-
-//   const instance = basicLightbox.create(`
-//     <img src="${largeImageLink}" alt="${imgAlt}" />
-//   `);
-
-//   instance.show();
-//   window.addEventListener("keydown", onKeyPress);
-//   window.addEventListener("click", onOverlayClick);
-// });
